@@ -2,17 +2,22 @@ import psycopg
 import jwt
 import time
 import sys
+import os
+import argparse
+from dotenv import load_dotenv
 
-key = 'e072b6332e650e041d8114e48af3caca60e07ed8ade231cc21b14b9f62966d27'
+load_dotenv()
+
+key = os.getenv("SECRET_KEY")
 
 def get_token(idpart: str) -> str:
       """ Generate token from id part """
       connection = psycopg.connect(
-                dbname="postgres",
-                user="dev",
-                password="123456",
-                host="localhost",
-                port="5432"
+                dbname=os.getenv("POSTGRES_DB"),
+                user=os.getenv("POSTGRES_USER"),
+                password=os.getenv("POSTGRES_PASS"),
+                host=os.getenv("POSTGRES_HOST"),
+                port=os.getenv("POSTGRES_PORT")
         )
         
       cursor = connection.cursor()
@@ -38,11 +43,20 @@ def get_token(idpart: str) -> str:
       encoded_data = jwt.encode(payload=payload,
                               key=key,
                               algorithm="HS256") 
-      
+          
       return encoded_data          
 
 
 if __name__ == "__main__":
-     idpart = sys.argv[1]
-     
-     print(get_token(idpart))       
+    
+    parser = argparse.ArgumentParser(
+         description="Script para gerar token jwt do participante"
+    )
+
+    parser.add_argument("--idpart", required=True, default=1, type=int, help="Enter o idpart: 8012")
+
+    args = parser.parse_args()
+
+    idpart = args.idpart
+
+    print(get_token(idpart))
