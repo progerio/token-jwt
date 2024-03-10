@@ -38,7 +38,7 @@ def get_token(idpart: str) -> str:
       }  
 
       cursor.close()
-
+      connection.close()
       encoded_data = jwt.encode(payload=payload,
                               key=secret_key,
                               algorithm="HS256") 
