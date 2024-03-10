@@ -1,14 +1,13 @@
 import psycopg
 import jwt
 import time
-import sys
 import os
 import argparse
 from dotenv import load_dotenv
 
 load_dotenv()
 
-key = os.getenv("SECRET_KEY")
+secret_key = os.getenv("SECRET_KEY")
 
 def get_token(idpart: str) -> str:
       """ Generate token from id part """
@@ -41,7 +40,7 @@ def get_token(idpart: str) -> str:
       cursor.close()
 
       encoded_data = jwt.encode(payload=payload,
-                              key=key,
+                              key=secret_key,
                               algorithm="HS256") 
           
       return encoded_data          
