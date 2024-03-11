@@ -29,11 +29,11 @@ def get_token(idpart: str) -> str:
                      AND ativo='1' """, [idpart], binary=True)
 
       iss = cursor.fetchone()[0]
-              
+      print(iss)        
       payload = {
                 'iss': iss,
                 'aud': 1,
-                'iat': time.time(),
+                'iat': time.time_ns(),
                 'exp': 1893466800
       }  
 
